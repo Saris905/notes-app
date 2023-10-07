@@ -46,6 +46,12 @@ const computedValue = computed({
 
 <style lang="css">
   .note-input {
+    padding: 0;
+    margin-top: 10px;
+  }
+
+  .note-input input {
+    width: 250px;
     padding: 5px;
   }
 

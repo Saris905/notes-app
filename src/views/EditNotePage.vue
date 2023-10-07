@@ -1,19 +1,19 @@
 <template>
-  <div class="view-note-page container">
-    <div class="view-note-page-header">
+  <div class="edit-note-page container">
+    <div class="edit-note-page-header">
       <ReturnButton />
-      <h1>Страница просмотра заметки</h1>
+      <h1>Редактировать заметку</h1>
     </div>
     
-    <Note 
-      :note="note"
-      @on-finished="toggleFinished"
-    />
+    <div class="edit-note-title">
+      <span>Заголовок</span>
+      <NoteInput :value="note.title" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import Note from '@/components/Note.vue'
+import NoteInput from '@/components/ui/NoteInput.vue';
 import ReturnButton from '@/components/ui/ReturnButton.vue';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
@@ -25,17 +25,15 @@ const store = useNotesStore();
 const noteId = Number(route.params?.id) - 1;
 const note = computed(() => store.notes[noteId] || {});
 
-const toggleFinished = (noteId: number, todoId: number) => {
-    store.toggleFinished(noteId, todoId);
-  };
+
 </script>
 
 <style lang="css">
-.view-note-page {
-  padding: 0 20px;
+.edit-note-page {
+  padding: 0;
 }
 
-.view-note-page-header {
+.edit-note-page-header {
   margin: 24px 0;
   display: flex;
 }

@@ -29,8 +29,8 @@ import { useRouter } from 'vue-router';
   const notesStore = useNotesStore();
   const router = useRouter();
 
-  const editNote = () => {
-    console.log('editNote');
+  const editNote = (noteId: string) => {
+    router.push(`/edit/${noteId}`);
   };
 
   const deleteNote = (noteId: number) => {
@@ -38,7 +38,7 @@ import { useRouter } from 'vue-router';
     if (confirmation) notesStore.deleteNote(noteId);
   };
 
-  const showNote = (noteId: number | string) => {
+  const showNote = (noteId: string) => {
     router.push(`/view/${noteId}`);
   };
 </script>
