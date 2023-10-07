@@ -18,10 +18,10 @@ export const router = createRouter({
     //   name: 'EditNote',
     //   component: Home
     // }, 
-    // {
-    //   path: '/view/:id',
-    //   name: 'ViewNote',
-    //   component: Home
-    // }
+    {
+      path: '/view/:id',
+      name: 'ViewNote',
+      component: () => import('@/views/ViewNotePage.vue'),
+    }
   ],
 })

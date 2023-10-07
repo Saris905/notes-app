@@ -47,3 +47,13 @@ body {
 ol, ul {
 	list-style: none;
 }
+
+.container {
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+h1 {
+  font-size: 30px;
+  text-align: center;
+}

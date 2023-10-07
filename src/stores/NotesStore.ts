@@ -2,13 +2,18 @@ import { defineStore } from "pinia";
 
 interface State {
   notes: Note[],
-  activeTab: number,
 }
 
 interface Note {
   id: number,
   title: string,
-  description: string,
+  createdDate: string,
+  todos: TodoItem[],
+}
+
+interface TodoItem {
+  id: number,
+  title: string,
   isFinished: boolean,
   createdDate: string,
 }
@@ -17,63 +22,78 @@ export const useNotesStore = defineStore('notesStore', {
   state: (): State => ({
      notes: [{
       id: 1,
-      title: 'Note 1',
-      description: 'Some detail about Note 1',
-      isFinished: true,
+      title: 'Купить продукты',
       // new Date().toISOString
-      createdDate: '2023-08-29T05:35:39.995Z',
+      createdDate: '2022-08-29T05:35:39.995Z',
+      todos: [{
+        id: 1,
+        title: 'Хлеб',
+        isFinished: true,
+        createdDate: '2023-08-29T05:35:39.995Z',
+      }, {
+        id: 2,
+        title: 'Молоко',
+        isFinished: false,
+        createdDate: '2023-08-29T05:35:39.995Z',
+      }, {
+        id: 3,
+        title: 'Овощи',
+        isFinished: true,
+        createdDate: '2023-08-29T05:35:39.995Z',
+      }, {
+        id: 4,
+        title: 'Мясо',
+        isFinished: false,
+        createdDate: '2023-08-29T05:35:39.995Z',
+      }],
      }, {
       id: 2,
-      title: 'Note 2',
-      description: 'Some more detail about Note 2. Some more detail about Note 2',
-      isFinished: false,
-      createdDate: '2023-09-29T06:35:39.995Z',
-     }, {
-      id: 3,
-      title: 'Note 3',
-      description: 'Some more detail about Note 3. Some more detail about Note 3',
-      isFinished: true,
-      createdDate: '2022-10-20T07:20:39.995Z',
-     }, {
-      id: 4,
-      title: 'Note 4',
-      description: 'Some more detail about Note 4. Some more detail about Note 4',
-      isFinished: false,
-      createdDate: '2021-11-10T07:21:39.995Z',
-     }, {
-      id: 5,
-      title: 'Note 5',
-      description: 'Some more detail about Note 5. Some more detail about Note 5',
-      isFinished: true,
-      createdDate: '2020-12-19T07:35:39.995Z',
-     }],
-     activeTab: 1,
+      title: 'Уборка',
+      createdDate: '2023-08-29T05:35:39.995Z',
+      todos: [{
+        id: 1,
+        title: 'Кухня',
+        isFinished: true,
+        createdDate: '2023-08-29T05:35:39.995Z',
+      }, {
+        id: 2,
+        title: 'Ванная',
+        isFinished: false,
+        createdDate: '2023-08-29T05:35:39.995Z',
+      }],
+    }],
   }),
 
   getters: {
-    uncompletedNotes(): Note[] {
-      return this.notes.filter(({ isFinished }) => !isFinished);
+    sortedByDateNotes(): Note[] {
+      return this.notes.sort((a, b) => {
+        return new Date(a.createdDate).valueOf() - new Date(b.createdDate).valueOf();
+      })
     },
 
-    sortedNotes(): Note[] {
-      return [...this.notes.sort((a, b) => {
-        return new Date(a.createdDate).valueOf() - new Date(b.createdDate).valueOf();
-      })];
-    }
+    notesWithSortedTodos(): Note[] {
+      return this.sortedByDateNotes.filter(({ todos }) => todos
+      .sort((a, b) => {
+          return new Date(a.createdDate).valueOf() - new Date(b.createdDate).valueOf();
+      })
+      .sort((x, y) => {
+        return (x.isFinished === y.isFinished) 
+        ? 0 : x.isFinished 
+        ? 1 : -1;
+    }))
+    },
   },
   
   actions: {
-    setActiveTab(id: number) {
-      this.activeTab = id;
-    },
-
     deleteNote(noteId: number) {
       this.notes = this.notes.filter(({ id }) => id !== noteId);
     },
 
-    toggleFinished(noteId: number) {
-      const note = this.notes.findIndex(({ id }) => id === noteId);
-      this.notes[note].isFinished = !this.notes[note].isFinished;
+    toggleFinished(noteId: number, todoId: number) {
+      const noteIndex = this.notes.findIndex(({ id }) => id === noteId);
+      const note = this.notes[noteIndex];
+      const todoIndex = note.todos.findIndex(({ id }) => id === todoId)
+      note.todos[todoIndex].isFinished = !note.todos[todoIndex].isFinished;
     }
   }
 })  
