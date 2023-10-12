@@ -1,13 +1,13 @@
 <template>
   <div class="note">
     <div class="note-info">
-      <h2 class="note-title" @click="$emit('on-show', props.note.id)">
-        {{ order }} {{ props.note.title }}
+      <h2 class="note-title" @click="showNote(props.note.id)">
+        {{ orderNumber }} {{ props.note.title }}
       </h2>
 
       <div class="note-todos">
         <ToDoItem 
-          v-for="(todo, index) in note.todos"
+          v-for="(todo, index) in computedTodos"
           :key="todo.title + index"
           :todo="todo"
           :readonly="readonly"
@@ -17,7 +17,7 @@
     </div>
 
     <div class="note-buttons">
-      <div class="note-button-edit" @click="$emit('on-edit', props.note.id)">
+      <div class="note-button-edit" @click="editNote(props.note.id)">
         &#9998;
       </div>
       <div class="note-button-delete" @click="$emit('on-delete', props.note.id)">
@@ -28,9 +28,11 @@
 </template>
 
 <script setup lang="ts">
-import ToDoItem from './ToDoItem.vue';
 import { computed } from 'vue';
+import { useRouter } from 'vue-router';
+import ToDoItem from './ToDoItem.vue';
 
+const router = useRouter();
 const props = defineProps({
   note: {
     type: Object,
@@ -40,11 +42,28 @@ const props = defineProps({
   readonly: {
     type: Boolean,
     default: false,
-  }
-});
+  },
 
-const order = computed(() => props.note.order ? `${props.note.order}.` : '');
+  previewLimit: {
+    type: Number,
+  },
+});
 const emit = defineEmits(['on-show', 'on-edit', 'on-delete', 'on-finished']);
+
+const orderNumber = computed(() => props.note.order ? `${props.note.order}.` : '');
+const computedTodos = computed(() => {
+  return props.previewLimit 
+    ? [...props.note.todos.slice(0, props.previewLimit)]
+    : props.note.todos;
+})
+
+const editNote = (noteId: string) => {
+  router.push(`/edit/${noteId}`);
+};
+
+const showNote = (noteId: string) => {
+  router.push(`/view/${noteId}`);
+};
 </script>
 
 <style>

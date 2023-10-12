@@ -13,11 +13,11 @@ export const router = createRouter({
       name: 'AddNote',
       component: () => import('@/views/AddNotePage.vue'),
     }, 
-    // {
-    //   path: '/edit',
-    //   name: 'EditNote',
-    //   component: Home
-    // }, 
+    {
+      path: '/edit/:id',
+      name: 'EditNote',
+      component: () => import('@/views/EditNotePage.vue'),
+    }, 
     {
       path: '/view/:id',
       name: 'ViewNote',

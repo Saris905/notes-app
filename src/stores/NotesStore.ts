@@ -80,11 +80,15 @@ export const useNotesStore = defineStore('notesStore', {
         return (x.isFinished === y.isFinished) 
         ? 0 : x.isFinished 
         ? 1 : -1;
-    }))
+      }))
     },
   },
   
   actions: {
+    createNote(note: Note) {
+      this.notes.push(note);
+    },
+
     deleteNote(noteId: number) {
       this.notes = this.notes.filter(({ id }) => id !== noteId);
     },
@@ -94,6 +98,18 @@ export const useNotesStore = defineStore('notesStore', {
       const note = this.notes[noteIndex];
       const todoIndex = note.todos.findIndex(({ id }) => id === todoId)
       note.todos[todoIndex].isFinished = !note.todos[todoIndex].isFinished;
-    }
+    },
+
+    renameNote(noteId: number, title: string) {
+      const noteIndex = this.notes.findIndex(({ id }) => id === noteId);
+      const note = this.notes[noteIndex];
+      note.title = title;
+    },
+
+    addToDo(noteId: number, todo: TodoItem) {
+      const noteIndex = this.notes.findIndex(({ id }) => id === noteId);
+      const note = this.notes[noteIndex];
+      note.todos.push(todo);
+    },
   }
 })  

@@ -1,29 +1,27 @@
 <template>
   <div class="add-note-page container">
-    <h1>View of Add Note Page</h1>
-    <ReturnButton />
+    <div class="add-note-page-header">
+      <ReturnButton />
+      <h1>Добавить новую заметку</h1>
+    </div>
     
-    <div class="add-note-title">
-      <span>Заголовок</span>
-      <NoteInput value="test" />
-    </div>
-
-    <div class="add-note-title">
-      <span>Заголовок</span>
-      <NoteInput value="test" />
-    </div>
+    <NoteForm />
   </div>
 </template>
 
 <script setup lang="ts">
-import NoteInput from '@/components/NoteInput.vue';
-import ReturnButton from '@/components/ReturnButton.vue';
+import NoteForm from '@/components/ui/NoteForm.vue';
+import ReturnButton from '@/components/ui/ReturnButton.vue';
 
 </script>
 
 <style lang="css">
-  .add-note-page {
-    font-size: 30px;
-    color: lightblue;
-  }
+.add-note-page {
+  padding: 0;
+}
+
+.add-note-page-header {
+  margin: 24px 0;
+  display: flex;
+}
 </style>
