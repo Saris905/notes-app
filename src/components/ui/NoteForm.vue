@@ -9,6 +9,7 @@
         @update:model-value="updateTitle($event.target.value)"
       />
     </div>
+
     <div class="note-form-field">
       <span>Задачи</span>
       <NoteInput 
@@ -18,6 +19,7 @@
         @update:model-value="updateTodoInput(task.id, $event.target.value)"
       />
     </div>
+    
     <button 
       class="note-form-button"
       @click="submit"
@@ -28,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, withDefaults, onMounted, ref } from 'vue';
+import { computed, withDefaults, onMounted, ref, watch } from 'vue';
 import NoteInput from '@/components/ui/NoteInput.vue';
 
 type Todo = {
@@ -41,14 +43,16 @@ interface Props {
   todos?: Todo[],
 }
 
-const emit = defineEmits(['on-change-title']);
+const emit = defineEmits(['submitted']);
 const props = withDefaults(defineProps<Props>(), {
   title: '',
   todos: () => [],
 });
 
-const error = ref('');
+const todosWithEmptyFields = computed(() => localTodos.value.filter(t => !t.title).length);
 const propsNotEmpty = computed(() => Boolean(props.todos.length && props.title));
+
+const error = ref('');
 const localTitle = ref('');
 const localTodos = ref([{ id: 1, title: '' }, { id: 2, title: '' }, { id: 3, title: '' }]);
 
@@ -57,8 +61,13 @@ onMounted(() => {
     localTitle.value = props.title;
     localTodos.value = JSON.parse(JSON.stringify(props.todos));
   }
+});
 
-  if (props.todos.length > 3) localTodos.value.push({ id: 123, title: '' });
+watch(todosWithEmptyFields, (length) => {
+  if (!length) {
+    const id = Math.floor(Math.random() * 100);
+    localTodos.value.push({ id, title: '' }); 
+  }
 });
 
 const updateTitle = (value: string) => {
@@ -68,11 +77,17 @@ const updateTitle = (value: string) => {
 
 const updateTodoInput = (taskId: number, value: string) => {
   const task = localTodos.value.find((todo) => todo.id === taskId);
-  if (task?.title) task.title = value;
+  if (task?.id) task.title = value;
 };
 
 const submit = () => {
-  if (!localTitle.value) error.value = 'Обязательное поле';
+  if (!localTitle.value) {
+    error.value = 'Обязательное поле';
+    return;
+  }
+
+  const todos = localTodos.value.filter(t => t.title);
+  emit('submitted', { title: localTitle, todos })
 }
 </script>
 
