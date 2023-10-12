@@ -1,8 +1,21 @@
 <template>
-  <button class="return-button">
-    <router-link to="/">&larr;</router-link>
+  <button 
+    class="return-button"
+    @click="goBack"
+  >
+    &larr;
   </button>
 </template>
+
+<script setup lang="ts">
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const goBack = () => {
+  router.go(-1);
+};
+</script>
 
 <style>
   .return-button {
