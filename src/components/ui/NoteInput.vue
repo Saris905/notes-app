@@ -1,20 +1,17 @@
 <template>
   <div class="note-input">
     <input 
-      v-model="computedValue" 
+      :value="props.modelValue" 
       :placeholder="placeholder" 
-      :readonly="readonly" 
-      type="text"
+      @blur="emit('update:modelValue', $event)"
     >
-    <span class="node-input-error">{{ error }}</span>
+    <span class="note-input-error">{{ error }}</span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-
 const props = defineProps({
-  value: {
+  modelValue: {
     type: String,
     default: '',
   },
@@ -24,30 +21,21 @@ const props = defineProps({
     default: '',
   },
 
-  readonly: {
-    type:Boolean,
-    default: false,
+  error: {
+    type: String,
+    default: '',
   }
 });
 
-const currentValue = ref('');
-const error = ref('');
-
-const computedValue = computed({
-  get() {
-    return currentValue.value || props.value;
-  },
-
-  set(val: string) {
-    currentValue.value = val;
-  },
-});
+const emit = defineEmits(['update:modelValue', 'validate'])
 </script>
 
 <style lang="css">
   .note-input {
+    display: flex;
+    flex-direction: column;
     padding: 0;
-    margin-top: 10px;
+    margin-top: 6px;
   }
 
   .note-input input {
@@ -55,7 +43,8 @@ const computedValue = computed({
     padding: 5px;
   }
 
-  .note-inpur-error {
+  .note-input-error {
+    margin-top: 6px;
     font-size: 24px;
     color: red;
   }

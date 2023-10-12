@@ -11,10 +11,9 @@
       <Note 
         v-for="(note, index) in notesStore.notesWithSortedTodos"
         :note="{ ...note, order: index + 1 }"
-        :key="note.id"
+        :key="index"
+        :preview-limit="3"
         readonly
-        @on-show="showNote"
-        @on-edit="editNote"
         @on-delete="deleteNote"
       />
     </TransitionGroup>
@@ -24,23 +23,13 @@
 <script setup lang="ts">
 import { useNotesStore } from '@/stores/NotesStore';
 import Note from '@/components/Note.vue'
-import { useRouter } from 'vue-router';
   
-  const notesStore = useNotesStore();
-  const router = useRouter();
+const notesStore = useNotesStore();
 
-  const editNote = (noteId: string) => {
-    router.push(`/edit/${noteId}`);
-  };
-
-  const deleteNote = (noteId: number) => {
-    const confirmation = window.confirm('Уверены, что хотите удалить заметку?');
-    if (confirmation) notesStore.deleteNote(noteId);
-  };
-
-  const showNote = (noteId: string) => {
-    router.push(`/view/${noteId}`);
-  };
+const deleteNote = (noteId: number) => {
+  const confirmation = window.confirm('Уверены, что хотите удалить заметку?');
+  if (confirmation) notesStore.deleteNote(noteId);
+};
 </script>
 
 <style lang="css">

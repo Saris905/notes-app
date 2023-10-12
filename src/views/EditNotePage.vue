@@ -5,27 +5,26 @@
       <h1>Редактировать заметку</h1>
     </div>
     
-    <div class="edit-note-title">
-      <span>Заголовок</span>
-      <NoteInput :value="note.title" />
-    </div>
+    <NoteForm 
+      :title="note.title"
+      :todos="note.todos"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import NoteInput from '@/components/ui/NoteInput.vue';
-import ReturnButton from '@/components/ui/ReturnButton.vue';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useNotesStore } from '@/stores/NotesStore';
+/* Components */
+import NoteForm from '@/components/ui/NoteForm.vue';
+import ReturnButton from '@/components/ui/ReturnButton.vue';
 
 const route = useRoute();
 const store = useNotesStore();
 
 const noteId = Number(route.params?.id) - 1;
 const note = computed(() => store.notes[noteId] || {});
-
-
 </script>
 
 <style lang="css">

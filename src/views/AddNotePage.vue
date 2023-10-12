@@ -5,19 +5,14 @@
       <h1>Добавить новую заметку</h1>
     </div>
     
-    <div class="add-note-title">
-      <span>Заголовок</span>
-      <NoteInput placeholder="Заголовок" :value="title" />
-    </div>
+    <NoteForm />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import NoteInput from '@/components/ui/NoteInput.vue';
+import NoteForm from '@/components/ui/NoteForm.vue';
 import ReturnButton from '@/components/ui/ReturnButton.vue';
 
-const title = ref('');
 </script>
 
 <style lang="css">
