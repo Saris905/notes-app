@@ -22,16 +22,16 @@ const router = useRouter();
 const store = useNotesStore();
 
 const noteId = Number(route.params?.id);
-const note = computed(() => store.notes.find(({ id }) => id == noteId) || {});
+const note = computed(() => store.notes.find(({ id }) => id == noteId));
 
 const toggleFinished = (noteId: number, todoId: number) => {
   store.toggleFinished(noteId, todoId);
 };
 
-const deleteNote = async (noteId: number) => {
+const deleteNote = (noteId: number) => {
   const confirmation = window.confirm('Уверены, что хотите удалить заметку?');
-  if (confirmation) await store.deleteNote(noteId);
-  await router.replace({ path: '/' });
+  if (confirmation) store.deleteNote(noteId);
+  router.replace({ path: '/' });
 };
 </script>
 

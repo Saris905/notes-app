@@ -3,7 +3,7 @@
     <Header title="Добавить новую заметку" />
     
     <NoteForm 
-      @submitted="createNewNote"
+      @submit="createNote"
     />
   </div>
 </template>
@@ -18,8 +18,8 @@ import Header from '@/components/Header.vue';
 const store = useNotesStore();
 const router = useRouter();
 
-const createNewNote = (note: Note) => {
-  store.createNote(note);
+const createNote = (note: Note) => {
+  store.addNote(note);
   router.push({ path: '/' })
 }
 </script>

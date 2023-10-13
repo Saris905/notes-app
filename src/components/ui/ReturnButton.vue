@@ -22,7 +22,7 @@ const goBack = () => {
     display: block;
     height: 30px;
     width: 50px;
-    margin-right: 30px;
+    margin-right: 80px;
   }
 
   .return-button a {

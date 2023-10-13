@@ -15,7 +15,8 @@
       <NoteInput 
         v-for="(task, index) in localTodos"
         :model-value="task.title"
-        :key="task.title + index"
+        :placeholder="`Задача ${index + 1}`"
+        :key="task.id"
         @update:model-value="updateTodoInput(task.id, $event.target.value)"
       />
     </div>
@@ -39,14 +40,20 @@ type Props = {
   note?: Note
 }
 
-const emit = defineEmits(['submitted']);
+const MIN_FIELDS_COUNT = 3;
+const defaultTodo: TodoItem = {
+  id: Math.floor(Math.random() * 10000),
+  title: '',
+  isFinished: false,
+  createdDate: new Date().toISOString()
+};
 
 const props = withDefaults(defineProps<Props>(), {
   note: () => ({ 
-    id: Math.floor(Math.random() * 100),
+    id: Math.floor(Math.random() * 1000),
     title: '',
     createdDate: new Date().toISOString(),
-    todos: [{},{},{}].map((_, index) => ({
+    todos: Array.from(Array(MIN_FIELDS_COUNT)).map((_, index) => ({
       id: index + 1,
       title: '',
       isFinished: false,
@@ -55,14 +62,7 @@ const props = withDefaults(defineProps<Props>(), {
   }),
 });
 
-const defaultTodo: TodoItem = {
-  id: Math.floor(Math.random() * 10000),
-  title: '',
-  isFinished: false,
-  createdDate: new Date().toISOString()
-};
-
-const todosWithEmptyFields = computed(() => localTodos.value.filter(t => !t.title).length);
+const emit = defineEmits(['submit']);
 
 const error = ref('');
 const localTitle = ref('');
@@ -73,14 +73,16 @@ onMounted(() => {
   localTodos.value = JSON.parse(JSON.stringify(props.note.todos));
 });
 
-watch(todosWithEmptyFields, (length) => {
-  if (!length) {
+const emptyFieldsCount = computed(() => localTodos.value.filter(t => !t.title).length);
+
+watch(emptyFieldsCount, (count) => {
+  if (!count) {
     localTodos.value.push({ ...defaultTodo, id: Math.floor(Math.random() * 10000) }); 
     return;
   }
 
-  if (localTodos.value.length < 3) {
-    const delta = 3 - localTodos.value.length;
+  if (localTodos.value.length < MIN_FIELDS_COUNT) {
+    const delta = MIN_FIELDS_COUNT - localTodos.value.length;
     for (let i = 0; i < delta; i++ ) {
       localTodos.value.push({ ...defaultTodo, id: Math.floor(Math.random() * 10000) });
     }
@@ -111,7 +113,7 @@ const submit = () => {
     todos,
   }
 
-  emit('submitted', result)
+  emit('submit', result)
 }
 </script>
 

@@ -1,11 +1,10 @@
 <template>
   <div class="note">
     <div class="note-info">
-      <h2 
-        class="note-title" 
-        @click="showNote(props.note.id)"
-      >
-        {{ orderNumber }} {{ props.note.title }}
+      <h2 class="note-title">
+        <router-link :to="`/view/${props.note.id}`">
+          {{ props.order }} {{ props.note.title }}
+        </router-link>
       </h2>
 
       <div class="note-todos">
@@ -20,12 +19,12 @@
     </div>
 
     <div class="note-buttons">
-      <div 
+      <router-link 
         class="note-button-edit" 
-        @click="editNote(props.note.id)"
+        :to="`/edit/${props.note.id}`"
       >
         &#9998;
-      </div>
+      </router-link>
       <div 
         class="note-button-delete" 
         @click="$emit('on-delete', props.note.id)"
@@ -37,42 +36,36 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { computed, withDefaults } from 'vue';
+import { Note } from '@/types/Note.type';
 import ToDoItem from './ToDoItem.vue';
 
-const router = useRouter();
-const props = defineProps({
-  note: {
-    type: Object,
-    required: true,
-  },
+type Props = {
+  note: Note,
+  readonly?: boolean,
+  previewLimit?: number,
+  order?: string,
+}
 
-  readonly: {
-    type: Boolean,
-    default: false,
-  },
-
-  previewLimit: {
-    type: Number,
-  },
+const props = withDefaults(defineProps<Props>(), {
+  note: () => ({ 
+    title: '', 
+    id: 0, 
+    createdDate: '', 
+    todos: []
+  }),
+  readonly: false,
+  previewLimit: 0,
+  order: '',
 });
+
 const emit = defineEmits(['on-delete', 'on-finished']);
 
-const orderNumber = computed(() => props.note.order ? `${props.note.order}.` : '');
 const computedTodos = computed(() => {
-  return props.previewLimit 
+  return Boolean(props.previewLimit) 
     ? props.note.todos.slice(0, props.previewLimit)
     : props.note.todos;
 })
-
-const editNote = (noteId: string) => {
-  router.push(`/edit/${noteId}`);
-};
-
-const showNote = (noteId: string) => {
-  router.push(`/view/${noteId}`);
-};
 </script>
 
 <style>

@@ -10,10 +10,11 @@
     <TransitionGroup name="list">
       <Note 
         v-for="(note, index) in notesStore.notesWithSortedTodos"
-        :note="{ ...note, order: index + 1 }"
-        :key="index"
-        :preview-limit="3"
         readonly
+        :note="note"
+        :key="index"
+        :order="`${index + 1}.`"
+        :preview-limit="3"
         @on-delete="deleteNote"
       />
     </TransitionGroup>

@@ -4,7 +4,7 @@
     
     <NoteForm 
       :note="currentNote"
-      @submitted="editCurrentNote"
+      @submit="editCurrentNote"
     />
   </div>
 </template>
@@ -13,11 +13,10 @@
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useNotesStore } from '@/stores/NotesStore';
-/* Components */
-import NoteForm from '@/components/ui/NoteForm.vue';
-import Header from '@/components/Header.vue';
 import { Note } from '@/types/Note.type'
-
+/* Components */
+import Header from '@/components/Header.vue';
+import NoteForm from '@/components/ui/NoteForm.vue';
 
 const route = useRoute();
 const router = useRouter();
