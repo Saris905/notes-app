@@ -41,7 +41,7 @@ type Props = {
 }
 
 const MIN_FIELDS_COUNT = 3;
-const defaultTodo: TodoItem = {
+const emptyTodo: TodoItem = {
   id: Math.floor(Math.random() * 10000),
   title: '',
   isFinished: false,
@@ -77,14 +77,15 @@ const emptyFieldsCount = computed(() => localTodos.value.filter(t => !t.title).l
 
 watch(emptyFieldsCount, (count) => {
   if (!count) {
-    localTodos.value.push({ ...defaultTodo, id: Math.floor(Math.random() * 10000) }); 
+    localTodos.value.push({ ...emptyTodo, id: Math.floor(Math.random() * 10000) }); 
     return;
   }
 
   if (localTodos.value.length < MIN_FIELDS_COUNT) {
     const delta = MIN_FIELDS_COUNT - localTodos.value.length;
+
     for (let i = 0; i < delta; i++ ) {
-      localTodos.value.push({ ...defaultTodo, id: Math.floor(Math.random() * 10000) });
+      localTodos.value.push({ ...emptyTodo, id: Math.floor(Math.random() * 10000) });
     }
   }
 }, { immediate: true });
@@ -101,6 +102,7 @@ const updateTodoInput = (taskId: number, value: string) => {
 
 const submit = () => {
   if (!localTitle.value) {
+    alert('Не заполнены обязательные поля');
     error.value = 'Обязательное поле';
     return;
   }
