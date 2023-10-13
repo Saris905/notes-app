@@ -1,9 +1,6 @@
 <template>
   <div class="add-note-page container">
-    <div class="add-note-page-header">
-      <ReturnButton />
-      <h1>Добавить новую заметку</h1>
-    </div>
+    <Header title="Добавить новую заметку" />
     
     <NoteForm 
       @submitted="createNewNote"
@@ -12,20 +9,16 @@
 </template>
 
 <script setup lang="ts">
-import NoteForm from '@/components/ui/NoteForm.vue';
-import ReturnButton from '@/components/ui/ReturnButton.vue';
-import { useNotesStore } from '@/stores/NotesStore';
+import { Note } from '@/types/Note.type'
 import { useRouter } from 'vue-router';
-
-type newNote = {
-  id: number,
-  title: string,
-}
+import { useNotesStore } from '@/stores/NotesStore';
+import NoteForm from '@/components/ui/NoteForm.vue';
+import Header from '@/components/Header.vue';
 
 const store = useNotesStore();
 const router = useRouter();
 
-const createNewNote = (note: newNote) => {
+const createNewNote = (note: Note) => {
   store.createNote(note);
   router.push({ path: '/' })
 }
@@ -34,10 +27,5 @@ const createNewNote = (note: newNote) => {
 <style lang="css">
 .add-note-page {
   padding: 0;
-}
-
-.add-note-page-header {
-  margin: 24px 0;
-  display: flex;
 }
 </style>

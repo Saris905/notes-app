@@ -19,7 +19,7 @@
         @update:model-value="updateTodoInput(task.id, $event.target.value)"
       />
     </div>
-    
+
     <button 
       class="note-form-button"
       @click="submit"
@@ -30,45 +30,53 @@
 </template>
 
 <script setup lang="ts">
-import { computed, withDefaults, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, Ref, watch, withDefaults } from 'vue';
+import { TodoItem } from '@/types/TodoItem.type';
+import { Note } from '@/types/Note.type';
 import NoteInput from '@/components/ui/NoteInput.vue';
 
-type Todo = {
-  id: number,
-  title: string,
-};
-
-interface Props {
-  title?: string,
-  todos?: Todo[],
+type Props {
+  note?: Note
 }
 
 const emit = defineEmits(['submitted']);
+
 const props = withDefaults(defineProps<Props>(), {
-  title: '',
-  todos: () => [],
+  note: () => ({ 
+    id: Math.floor(Math.random() * 100),
+    title: '',
+    createdDate: new Date().toISOString(),
+    todos: [{},{},{}].map((_, index) => ({
+      id: index + 1,
+      title: '',
+      isFinished: false,
+      createdDate: new Date().toISOString()
+    }))
+  }),
 });
 
 const todosWithEmptyFields = computed(() => localTodos.value.filter(t => !t.title).length);
-const propsNotEmpty = computed(() => Boolean(props.todos.length && props.title));
 
 const error = ref('');
 const localTitle = ref('');
-const localTodos = ref([{ id: 1, title: '' }, { id: 2, title: '' }, { id: 3, title: '' }]);
+const localTodos: Ref<TodoItem[]> = ref([]);
 
 onMounted(() => {
-  if (propsNotEmpty.value) {
-    localTitle.value = props.title;
-    localTodos.value = JSON.parse(JSON.stringify(props.todos));
-  }
+  localTitle.value = props.note.title;
+  localTodos.value = JSON.parse(JSON.stringify(props.note.todos));
 });
 
 watch(todosWithEmptyFields, (length) => {
   if (!length) {
-    const id = Math.floor(Math.random() * 100);
-    localTodos.value.push({ id, title: '' }); 
+    const defaultTodo: TodoItem = {
+      id: Math.floor(Math.random() * 100),
+      title: '',
+      isFinished: false,
+      createdDate: new Date().toISOString()
+    };
+    localTodos.value.push(defaultTodo); 
   }
-});
+}, { immediate: true });
 
 const updateTitle = (value: string) => {
   if (value) error.value = '';
@@ -87,7 +95,14 @@ const submit = () => {
   }
 
   const todos = localTodos.value.filter(t => t.title);
-  emit('submitted', { title: localTitle, todos })
+  const result: Note = {
+    id: props.note.id,
+    title: localTitle.value, 
+    createdDate: props.note.createdDate,
+    todos: todos,
+  }
+
+  emit('submitted', result)
 }
 </script>
 

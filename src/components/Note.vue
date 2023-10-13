@@ -1,7 +1,10 @@
 <template>
   <div class="note">
     <div class="note-info">
-      <h2 class="note-title" @click="showNote(props.note.id)">
+      <h2 
+        class="note-title" 
+        @click="showNote(props.note.id)"
+      >
         {{ orderNumber }} {{ props.note.title }}
       </h2>
 
@@ -17,10 +20,16 @@
     </div>
 
     <div class="note-buttons">
-      <div class="note-button-edit" @click="editNote(props.note.id)">
+      <div 
+        class="note-button-edit" 
+        @click="editNote(props.note.id)"
+      >
         &#9998;
       </div>
-      <div class="note-button-delete" @click="$emit('on-delete', props.note.id)">
+      <div 
+        class="note-button-delete" 
+        @click="$emit('on-delete', props.note.id)"
+      >
         &#215;
       </div>
     </div>
@@ -48,12 +57,12 @@ const props = defineProps({
     type: Number,
   },
 });
-const emit = defineEmits(['on-show', 'on-edit', 'on-delete', 'on-finished']);
+const emit = defineEmits(['on-delete', 'on-finished']);
 
 const orderNumber = computed(() => props.note.order ? `${props.note.order}.` : '');
 const computedTodos = computed(() => {
   return props.previewLimit 
-    ? [...props.note.todos.slice(0, props.previewLimit)]
+    ? props.note.todos.slice(0, props.previewLimit)
     : props.note.todos;
 })
 

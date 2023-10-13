@@ -1,9 +1,6 @@
 <template>
   <div class="view-note-page container">
-    <div class="view-note-page-header">
-      <ReturnButton />
-      <h1>Страница просмотра заметки</h1>
-    </div>
+    <Header title="Просмотр заметки" />
     
     <Note 
       :note="note"
@@ -14,8 +11,8 @@
 </template>
 
 <script setup lang="ts">
+import Header from '@/components/Header.vue';
 import Note from '@/components/Note.vue'
-import ReturnButton from '@/components/ui/ReturnButton.vue';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useNotesStore } from '@/stores/NotesStore';
@@ -41,10 +38,5 @@ const deleteNote = async (noteId: number) => {
 <style lang="css">
 .view-note-page {
   padding: 0 20px;
-}
-
-.view-note-page-header {
-  margin: 24px 0;
-  display: flex;
 }
 </style>

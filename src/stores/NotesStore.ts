@@ -1,21 +1,8 @@
 import { defineStore } from "pinia";
+import { Note } from '@/types/Note.type'
 
-interface State {
+type State = {
   notes: Note[],
-}
-
-interface Note {
-  id: number,
-  title: string,
-  createdDate: string,
-  todos: TodoItem[],
-}
-
-interface TodoItem {
-  id: number,
-  title: string,
-  isFinished: boolean,
-  createdDate: string,
 }
 
 export const useNotesStore = defineStore('notesStore', {
@@ -84,40 +71,17 @@ export const useNotesStore = defineStore('notesStore', {
   },
   
   actions: {
-    createNote(note) {
-      const randomId = Math.floor(Math.random() * 100);
-      const newNote: Note = {
-        title: note.title,
-        createdDate: new Date().toISOString(),
-        id: randomId,
-        todos: note.todos.map((t, i) => ({
-          id: i,
-          title: t.title,
-          isFinished: false,
-          createdDate: new Date().toISOString(),
-        }))
-      }
-      this.notes.push(newNote);
+    createNote(note: Note) {
+      this.notes.push(note);
     },
 
     deleteNote(noteId: number) {
       this.notes = this.notes.filter(({ id }) => id !== noteId);
     },
 
-    editNote(note) {
+    editNote(note: Note) {
       this.deleteNote(note.id);
-      const editedNote: Note = {
-        title: note.title,
-        createdDate: note.createdDate,
-        id: note.id,
-        todos: note.todos.map((t, i) => ({
-          id: t.id,
-          title: t.title,
-          isFinished: t.isFinished,
-          createdDate: t.createdDate,
-        }))
-      }
-      this.notes.push(editedNote);
+      this.notes.push(note);
     },
 
     toggleFinished(noteId: number, todoId: number) {

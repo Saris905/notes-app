@@ -9,13 +9,7 @@
 </script>
 
 <style lang="css">
-  .header {
-    display: flex;
-    justify-content: space-around;
-  }
-
-  .header a {
+  .app {
     color: #fff;
-    font-size: 30px;
   }
 </style>
