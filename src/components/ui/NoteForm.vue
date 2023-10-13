@@ -35,7 +35,7 @@ import { TodoItem } from '@/types/TodoItem.type';
 import { Note } from '@/types/Note.type';
 import NoteInput from '@/components/ui/NoteInput.vue';
 
-type Props {
+type Props = {
   note?: Note
 }
 
