@@ -81,7 +81,7 @@ export const useNotesStore = defineStore('notesStore', {
 
     editNote(note: Note) {
       this.deleteNote(note.id);
-      this.notes.push(note);
+      this.createNote(note);
     },
 
     toggleFinished(noteId: number, todoId: number) {

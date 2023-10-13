@@ -67,14 +67,23 @@ onMounted(() => {
 });
 
 watch(todosWithEmptyFields, (length) => {
+  const defaultTodo: TodoItem = {
+    id: Date.now(),
+    title: '',
+    isFinished: false,
+    createdDate: new Date().toISOString()
+  };
+
   if (!length) {
-    const defaultTodo: TodoItem = {
-      id: Math.floor(Math.random() * 100),
-      title: '',
-      isFinished: false,
-      createdDate: new Date().toISOString()
-    };
-    localTodos.value.push(defaultTodo); 
+    localTodos.value.push({ ...defaultTodo }); 
+    return;
+  }
+
+  if (localTodos.value.length < 3) {
+    const delta = 3 - localTodos.value.length;
+    for (let i = 0; i < delta; i++ ) {
+      localTodos.value.push({ ...defaultTodo, id: Date.now() + i });
+    }
   }
 }, { immediate: true });
 
