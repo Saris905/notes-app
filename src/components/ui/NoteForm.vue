@@ -55,6 +55,13 @@ const props = withDefaults(defineProps<Props>(), {
   }),
 });
 
+const defaultTodo: TodoItem = {
+  id: Math.floor(Math.random() * 10000),
+  title: '',
+  isFinished: false,
+  createdDate: new Date().toISOString()
+};
+
 const todosWithEmptyFields = computed(() => localTodos.value.filter(t => !t.title).length);
 
 const error = ref('');
@@ -67,22 +74,15 @@ onMounted(() => {
 });
 
 watch(todosWithEmptyFields, (length) => {
-  const defaultTodo: TodoItem = {
-    id: Date.now(),
-    title: '',
-    isFinished: false,
-    createdDate: new Date().toISOString()
-  };
-
   if (!length) {
-    localTodos.value.push({ ...defaultTodo }); 
+    localTodos.value.push({ ...defaultTodo, id: Math.floor(Math.random() * 10000) }); 
     return;
   }
 
   if (localTodos.value.length < 3) {
     const delta = 3 - localTodos.value.length;
     for (let i = 0; i < delta; i++ ) {
-      localTodos.value.push({ ...defaultTodo, id: Date.now() + i });
+      localTodos.value.push({ ...defaultTodo, id: Math.floor(Math.random() * 10000) });
     }
   }
 }, { immediate: true });
@@ -108,7 +108,7 @@ const submit = () => {
     id: props.note.id,
     title: localTitle.value, 
     createdDate: props.note.createdDate,
-    todos: todos,
+    todos,
   }
 
   emit('submitted', result)
