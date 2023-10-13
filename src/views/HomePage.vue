@@ -28,7 +28,7 @@ import Note from '@/components/Note.vue'
 const notesStore = useNotesStore();
 
 const deleteNote = (noteId: number) => {
-  const confirmation = window.confirm('Уверены, что хотите удалить заметку?');
+  const confirmation = window.confirm(`Уверены, что хотите удалить заметку?`);
   if (confirmation) notesStore.deleteNote(noteId);
 };
 </script>
