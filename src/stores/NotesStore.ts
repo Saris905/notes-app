@@ -87,8 +87,9 @@ export const useNotesStore = defineStore('notesStore', {
     toggleFinished(noteId: number, todoId: number) {
       const noteIndex = this.notes.findIndex(({ id }) => id === noteId);
       const note = this.notes[noteIndex];
-      const todoIndex = note.todos.findIndex(({ id }) => id === todoId)
-      note.todos[todoIndex].isFinished = !note.todos[todoIndex].isFinished;
+      const todoIndex = note.todos.findIndex(({ id }) => id === todoId);
+      const currentTodo = note.todos[todoIndex];
+      currentTodo.isFinished = !currentTodo.isFinished;
     },
   }
 })  

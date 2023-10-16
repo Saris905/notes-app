@@ -84,7 +84,7 @@ watch(emptyFieldsCount, (count) => {
   if (localTodos.value.length < MIN_FIELDS_COUNT) {
     const delta = MIN_FIELDS_COUNT - localTodos.value.length;
 
-    for (let i = 0; i < delta; i++ ) {
+    for (let i = 0; i < delta; i++) {
       localTodos.value.push({ ...emptyTodo, id: Math.floor(Math.random() * 10000) });
     }
   }

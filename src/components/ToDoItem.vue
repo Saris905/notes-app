@@ -1,6 +1,9 @@
 <template>
   <div :class="['to-do-item', { finished: props.todo.isFinished, readonly: props.readonly }]">
-    <div class="to-do-item-complete" @click="$emit('on-finished')">
+    <div 
+      class="to-do-item-complete" 
+      @click="$emit('on-finished')"
+    >
       <input 
         type="checkbox" 
         :disabled="props.readonly" 
