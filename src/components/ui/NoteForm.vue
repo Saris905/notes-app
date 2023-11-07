@@ -36,13 +36,17 @@ import { TodoItem } from '@/types/TodoItem.type';
 import { Note } from '@/types/Note.type';
 import NoteInput from '@/components/ui/NoteInput.vue';
 
+const generateRandomId = () => {
+  return Math.floor(Math.random() * 10000);
+}
+
 type Props = {
   note?: Note
 }
 
 const MIN_FIELDS_COUNT = 3;
 const emptyTodo: TodoItem = {
-  id: Math.floor(Math.random() * 10000),
+  id: generateRandomId(),
   title: '',
   isFinished: false,
   createdDate: new Date().toISOString()
@@ -50,7 +54,7 @@ const emptyTodo: TodoItem = {
 
 const props = withDefaults(defineProps<Props>(), {
   note: () => ({ 
-    id: Math.floor(Math.random() * 1000),
+    id: Math.floor(Math.random() * 10000),
     title: '',
     createdDate: new Date().toISOString(),
     todos: Array.from(Array(MIN_FIELDS_COUNT)).map((_, index) => ({
@@ -77,7 +81,7 @@ const emptyFieldsCount = computed(() => localTodos.value.filter(t => !t.title).l
 
 watch(emptyFieldsCount, (count) => {
   if (!count) {
-    localTodos.value.push({ ...emptyTodo, id: Math.floor(Math.random() * 10000) }); 
+    localTodos.value.push({ ...emptyTodo, id: generateRandomId() }); 
     return;
   }
 
@@ -85,7 +89,7 @@ watch(emptyFieldsCount, (count) => {
     const delta = MIN_FIELDS_COUNT - localTodos.value.length;
 
     for (let i = 0; i < delta; i++) {
-      localTodos.value.push({ ...emptyTodo, id: Math.floor(Math.random() * 10000) });
+      localTodos.value.push({ ...emptyTodo, id: generateRandomId() });
     }
   }
 }, { immediate: true });
